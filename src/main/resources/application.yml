@@ -1,0 +1,22 @@
+server:
+  port: 8081
+---
+spring:
+  profiles: local
+  data:
+    mongodb:
+      uri: mongodb+srv://training_rw_user:training_rw_password@training-cluster-dev.z7ar8.mongodb.net/customer-db
+datastore:
+  mongodb:
+    collection:
+      name: customer-coll-local
+---
+spring:
+  profiles: dev
+  data:
+    mongodb:
+      uri: mongodb+srv://training_rw_user:training_rw_password@training-cluster-dev.z7ar8.mongodb.net/customer-db
+datastore:
+  mongodb:
+    collection:
+      name: customer-coll-dev
