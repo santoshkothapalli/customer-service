@@ -1,0 +1,73 @@
+#!groovy
+pipeline {
+
+agent 
+{
+    label 'master'
+}
+    
+
+enviornment
+{
+    REPO_NAME = "abc_xyz"
+    OCP_PROJECT_NAME = "abc"
+    SNP_IMG_TAG = "SNAP_1.0.{BUILD_NUMBER}"
+    ARGOCD_DEV_APP_NAME = "xyz"
+    ARGOCD_TEST_APP_NAME = "abc"
+}
+stages 
+{
+
+    stage('Parameter Initialize')
+    {
+        steps
+        {
+            script
+            {
+                properties([
+                    Parameters ([
+                        boolenParam(defaultValue: false, descrition: 'Ready to Release',name: 'ReadyToRelease'),
+                        boolenParam(defaultValue: true, descrition: 'Deploy to Dev',name: 'Deploy_To_DEV'),
+                        boolenParam(defaultValue: false, descrition: 'Deploy to Test',name: 'Deploy_To_TEST'),
+
+                    ])
+                ])
+            }
+        }
+    }
+
+    stage('checkout SCM') 
+    {
+        steps 
+        {
+            script 
+            {
+                checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: 'origin/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'ketanchhatbar', url: 'https://github.com/acc-trainings/customer-service']]]
+                println "Branch Name : "+" ${env.BRANCH_NAME}"    
+            }
+        }
+            
+    }
+
+    stage('Create and Push PODMAN Image') 
+    {
+        when {
+            expression {
+                if(params.Deploy_To_DEV || params.Deploy_To_TEST) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
+
+        steps
+        {
+            withCredentials([usernamePassword(credentialsId: 'abc' , passwordVariable:'password', usernameVariable:'username')]) {
+                podman push ----
+            }
+        }
+    }
+}
+
+}
