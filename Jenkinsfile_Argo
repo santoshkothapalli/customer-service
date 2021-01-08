@@ -14,6 +14,8 @@ enviornment
     SNP_IMG_TAG = "SNAP_1.0.{BUILD_NUMBER}"
     ARGOCD_DEV_APP_NAME = "xyz"
     ARGOCD_TEST_APP_NAME = "abc"
+    IMAGE_NAME = "quay.io/necloudnativetraining/abc"
+    DOCKER_REPO = "/necloudnativetraining/abc"
 }
 stages 
 {
@@ -49,7 +51,7 @@ stages
             
     }
 
-    stage('Create and Push PODMAN Image') 
+    stage('Build Image using Podman') 
     {
         when {
             expression {
@@ -64,10 +66,32 @@ stages
         steps
         {
             withCredentials([usernamePassword(credentialsId: 'abc' , passwordVariable:'password', usernameVariable:'username')]) {
-                podman push ----
+                podman login quay.io -u ${{username}} -p ${{password}}
+                podman build . -t quay.io/necloudnativetraining/abc:${SNP_IMG_TAG} --cgroup-manager=cgroupfs
             }
         }
     }
+
+    stage('Push Image to Github Registry') 
+    {
+        when {
+            expression {
+                if(params.Deploy_To_DEV || params.Deploy_To_TEST) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        }
+
+        steps
+        {
+            withCredentials([usernamePassword(credentialsId: 'abc' , passwordVariable:'password', usernameVariable:'username')]) {
+                podman login quay.io -u ${{username}} -p ${{password}}
+                podman push quay.io/necloudnativetraining/abc::${SNP_IMG_TAG}
+            }
+        }
+    }   
 }
 
 }
