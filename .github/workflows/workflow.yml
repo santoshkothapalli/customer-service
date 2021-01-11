@@ -17,6 +17,8 @@ jobs:
         with:
           java-version: 11
       - name: Build with Maven
+        env:
+          spring.profiles.active: 'local'
         run: mvn clean install package
       - name: Extract branch name
         shell: bash
