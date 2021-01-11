@@ -1,3 +1,4 @@
+# Below server port only useful in local development environment
 # server:
 #   port: 8081
 ---
