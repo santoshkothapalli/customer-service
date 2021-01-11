@@ -57,4 +57,5 @@ jobs:
           cmd: |
             'version'
             'project necloudnativetraining-dev'
+            'set env dc/customer-service spring.profiles.active=local'
             'tag --source=docker quay.io/necloudnativetraining/customer-service:${{ steps.extract_branch.outputs.branch }} necloudnativetraining-dev/customer-service:${{ steps.extract_branch.outputs.branch }}'
