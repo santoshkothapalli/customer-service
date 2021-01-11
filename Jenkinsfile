@@ -38,7 +38,8 @@ node () {
                     openshift.withCluster() {
                         openshift.withProject(args.PROJECT_NAME) {
                             // openshift.newApp "registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift~./", "--name=${args.SERVICE_NAME}"
-                            openshift.newApp "fabric8/s2i-java~./", "--name=${args.SERVICE_NAME}"
+                            //openshift.newApp "fabric8/s2i-java~./", "--name=${args.SERVICE_NAME}"
+                                openshift.newApp "registry.access.redhat.com/openjdk/openjdk-11~./", "--name=${args.SERVICE_NAME}"
                             // openshift.newApp "registry.access.redhat.com/ubi8/openjdk-11~./", "--name=${args.SERVICE_NAME}"
                             
                         }
