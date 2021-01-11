@@ -1,6 +1,6 @@
 def args = [:]
 args.CLUSTER_NAME = ""
-args.PROJECT_NAME = "acc-trainings"
+args.PROJECT_NAME = "springboot-workshop-feb-2021"
 args.SERVICE_NAME = "customer-service"
 args.SERVICE_VERSION = "0.0.1-SNAPSHOT"
 
