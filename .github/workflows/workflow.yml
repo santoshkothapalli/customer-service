@@ -16,10 +16,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Build with Maven
-        env:
-          spring.profiles.active: 'local'
-        run: mvn clean install package
       - name: Extract branch name
         shell: bash
         run: |
@@ -34,6 +30,10 @@ jobs:
           echo ::set-output name=image-name::$(echo quay.io/necloudnativetraining/customer-service})
           echo ::set-output name=branch::${GITHUB_REF#refs/heads/}
           echo ::set-output name=docker_repo::$(echo /necloudnativetraining/customer-service) 
+      - name: Build with Maven
+        env:
+          spring.profiles.active: 'local'
+        run: mvn clean install package
       - name: Login to Podman
         id: login
         run:  |
