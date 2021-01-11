@@ -3,7 +3,9 @@
 #   port: 8081
 ---
 spring:
-  profiles: local
+  config:
+    activate:
+      on-profile: local
   spring.data.mongodb.host: mongodb
   data:
     mongodb:
