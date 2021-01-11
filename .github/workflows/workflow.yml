@@ -37,10 +37,22 @@ jobs:
         run:  |
           echo ${{ steps.extract_branch.outputs.branch }}
           echo ${{ steps.extract_branch.outputs.sha_short }}
-          podman login quay.io -u="necloudnativetraining+openshift_robo_user" -p="SWDWA4OFSWC85PMXD1K15S8LLRPHS5LUBDKJD37ZP8DRBSS01V8JTEFPCACCXZ05"
+          podman login quay.io -u ${{ secrets.quay_username }} -p ${{ secrets.quay_password }}
       - name: Build Image using Podman
         run: |
           podman build . -t quay.io/necloudnativetraining/customer-service:${{ steps.extract_branch.outputs.branch }} --cgroup-manager=cgroupfs
       - name: Push Image to quay Registry
         run: |
             podman push quay.io/necloudnativetraining/customer-service:${{ steps.extract_branch.outputs.branch }}
+      - name: OpenShift Action
+        uses: redhat-developer/openshift-actions@v2.0
+        with:
+          # The URL of the Openshift cluster
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
+          # JSON with values to connect to the Openshift cluster
+          parameters: '{"username": "${{ secrets.OPENSHIFT_USER }}", "acceptUntrustedCerts": "true", "password":"${{ secrets.OPENSHIFT_PASSWORD }}"}'
+          # Oc command to be executed
+          cmd: |
+            'version'
+            'project necloudnativetraining-dev'
+            'tag --source=docker quay.io/necloudnativetraining/customer-service:${{ steps.extract_branch.outputs.branch }} necloudnativetraining-dev/customer-service:${{ steps.extract_branch.outputs.branch }}'
