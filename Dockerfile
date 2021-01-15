@@ -1,5 +1,5 @@
-//FROM registry.access.redhat.com/openjdk/openjdk-11-rhel7
-FROM quay.io
+FROM registry.access.redhat.com/openjdk/openjdk-11-rhel7
+//FROM quay.io
 
 # Create app directory
 WORKDIR /opt/app
