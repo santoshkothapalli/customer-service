@@ -22,10 +22,7 @@ stages {
                 println "Branch Name : "+" ${env.BRANCH_NAME}"    
             }
         }
-            
-       
     }
-    
     stage ('Build JAR')
         {
             steps {
@@ -75,31 +72,6 @@ stages {
     }
     }   
     }    
-
-        stage('Deploy to Dev') {
-    steps {
-        script {
-        withCredentials([usernamePassword(credentialsId: 'GitHub' , passwordVariable:'password', usernameVariable:'username')]) {
-            def appdeploy = readYaml file: "Deployment/appdeploy.yaml"
-            sh '''
-            sed "s/%%IMG_TAG%%/${SNP_IMG_TAG}/g" > "${WORKSPACE}/Deployment/appdeploy.yaml"
-            cat "{WORKSPACE}/Deployment/appdeploy.yaml"
-            '''
-            dir('Deployment') {
-            sh '''
-            git init
-            '''
-            sh 'ls'
-            sh 'pwd'
-            sh 'git add appdeploy.yaml'
-            sh '''
-            git commit -am "adding latest appdeploy.yaml file to config repo"
-            git push https://$username:$password@github.com/acc-trainings/customer-service.git -all
-            '''
-            }
-    }
-    }
-    }   
-    }    
+  
 }
 }
