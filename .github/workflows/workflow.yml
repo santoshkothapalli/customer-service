@@ -46,15 +46,3 @@ jobs:
       - name: Push Image to quay Registry
         run: |
             podman push quay.io/necloudnativetraining/customer-service:${{ steps.extract_branch.outputs.branch }}
-      - name: OpenShift Action
-        uses: redhat-developer/openshift-actions@v2.0
-        with:
-          # The URL of the Openshift cluster
-          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
-          # JSON with values to connect to the Openshift cluster
-          parameters: '{"username": "${{ secrets.OPENSHIFT_USER }}", "acceptUntrustedCerts": "true", "password":"${{ secrets.OPENSHIFT_PASSWORD }}"}'
-          # Oc command to be executed
-          cmd: |
-            'version'
-            'project at-test'
-            'tag --source=docker quay.io/necloudnativetraining/customer-service:${{ steps.extract_branch.outputs.branch }} at-test/customer-service:${{ steps.extract_branch.outputs.branch }}'
