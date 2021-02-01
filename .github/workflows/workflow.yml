@@ -2,7 +2,7 @@ name: Java CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ configmap ]
     path-ignore:
       - 'configurations/**'
 
@@ -56,5 +56,5 @@ jobs:
           # Oc command to be executed
           cmd: |
             'version'
-            'project necloudnativetraining-dev'
-            'tag --source=docker quay.io/necloudnativetraining/customer-service:${{ steps.extract_branch.outputs.branch }} necloudnativetraining-dev/customer-service:${{ steps.extract_branch.outputs.branch }}'
+            'project at-test'
+            'tag --source=docker quay.io/necloudnativetraining/customer-service:${{ steps.extract_branch.outputs.branch }} at-test/customer-service:${{ steps.extract_branch.outputs.branch }}'
