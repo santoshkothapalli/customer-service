@@ -20,7 +20,7 @@ spring:
   profiles: dev
   data:
     mongodb:
-      uri: mongodb+srv://training_rw_user:training_rw_password@172.30.177.76:27017/customer-db
+      uri: mongodb://training_rw_user:training_rw_password@172.30.156.114:27017/customer-db
 datastore:
   mongodb:
     collection:
